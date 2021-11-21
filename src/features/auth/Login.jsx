@@ -7,15 +7,11 @@ import {
   USER_ID,
   VALIDATE_EMAIL,
 } from "../../utils/constant";
-import { verifyEmail, addEmail, selectEmail } from "../index";
+import { verifyEmail, addEmail } from "../index";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 
 export function Login() {
   const [email, setEmail] = useState("");
-  const checkEmail = useSelector(selectEmail);
-
-  console.log({ checkEmail })
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

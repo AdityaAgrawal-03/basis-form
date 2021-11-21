@@ -26,9 +26,17 @@ export const verifyOtp = createAsyncThunk(
   }
 );
 
-// export const resendOtp = createAsyncThunk("auth/resendOtp", async () => {
+export const resendOtp = createAsyncThunk(
+  "auth/resendOtp",
+  async ({ email, token }) => {
+    const response = await axios.put(`${BASE_URL}/users/token/resendtoken`, {
+      email: email,
+      token: token,
+    });
 
-// })
+    return response.data;
+  }
+);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -45,14 +53,15 @@ export const authSlice = createSlice({
     addEmail: (state, action) => {
       state.email = action.payload;
     },
-    resetAuth: (state) => {
-      state.status = "idle";
-      state.email = "";
-      state.token = null;
-      state.isLogin = false;
-      state.error = null;
-      state.wrongEmailTokenCount = 0;
-      state.resendEmailTokenCount = 0;
+    resetAuth: (state, { payload }) => {
+      console.log(payload)
+      state.status = payload.status;
+      state.email = payload.email;
+      state.token = payload.token;
+      state.isLogin = payload.login;
+      state.error = payload.error;
+      state.wrongEmailTokenCount = payload.wrongEmailTokenCount;
+      state.resendEmailTokenCount = payload.resendEmailTokenCount;
     },
   },
   extraReducers: {
@@ -61,7 +70,7 @@ export const authSlice = createSlice({
     },
     [verifyEmail.fulfilled]: (state, action) => {
       state.status = "fulfilled";
-      state.token = action.payload.token;
+      state.token = String(action.payload.token);
       state.isLogin = action.payload.isLogin;
     },
     [verifyEmail.rejected]: (state, action) => {
@@ -84,6 +93,23 @@ export const authSlice = createSlice({
       }
     },
     [verifyOtp.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.error.message;
+    },
+    [resendOtp.pending]: (state) => {
+      state.status = "pending";
+    },
+    [resendOtp.fulfilled]: (state, { payload }) => {
+      state.status = "fulfilled";
+
+      console.log(payload);
+
+      if (payload.success) {
+        state.wrongEmailTokenCount = payload.results.wrongEmailTokenCount;
+        state.resendEmailTokenCount = payload.results.resendEmailTokenCount;
+      }
+    },
+    [resendOtp.rejected]: (state, action) => {
       state.status = "rejected";
       state.error = action.error.message;
     },
