@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { send } from "emailjs-com";
 import {
   SERVICE_ID,
@@ -6,16 +7,17 @@ import {
   USER_ID,
   VALIDATE_EMAIL,
 } from "../../utils/constant";
-import { verifyEmail } from "../index"
+import { verifyEmail, addEmail } from "../index";
 import { useDispatch } from "react-redux";
 
 export function Login() {
   const [email, setEmail] = useState("");
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const sendEmail = (e) => {
     e.preventDefault();
-    console.log("here");
 
     send(
       SERVICE_ID,
@@ -25,16 +27,20 @@ export function Login() {
       },
       USER_ID
     )
-      .then((response) => console.log(response))
+      .then(
+        (response) =>
+          response.status === 200 && navigate("/verify", { replace: true })
+      )
       .catch((error) => console.error(error));
 
-    dispatch(verifyEmail({ email }))
+    dispatch(addEmail(email));
+    dispatch(verifyEmail({ email }));
 
     setEmail("");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center h-screen">
       <form className="w-full md:w-1/3 rounded-lg flex flex-col p-4">
         <label className="md:text-2xl">Enter your email ID: </label>
         <input
@@ -43,6 +49,7 @@ export function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <button
           type="button"
           className={
