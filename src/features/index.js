@@ -1,5 +1,7 @@
 export { Login } from "./auth/Login";
-export { VerifyOTP } from "./auth/VerifyOTP"
+export { VerifyOTP } from "./auth/VerifyOTP";
+export  { Signup } from "./auth/Signup";
+export { Profile } from "./auth/Profile"
 
 export {
   selectAuthStatus,

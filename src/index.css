@@ -15,4 +15,8 @@ body {
   .otp-box {
     @apply w-full p-2 outline-none text-lg text-center my-2 bg-transparent
   }
+
+  /* .signup-input {
+    @apply 
+  } */
 }
