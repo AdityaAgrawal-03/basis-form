@@ -16,19 +16,19 @@ export const verifyEmail = createAsyncThunk(
 export const verifyOtp = createAsyncThunk(
   "auth/verifyToken",
   async ({ email, token, verificationCode }) => {
-    const {
-      data: { success, results },
-    } = await axios.put(`${BASE_URL}/users/email/verify`, {
+    const response = await axios.put(`${BASE_URL}/users/email/verify`, {
       email,
       token,
       verificationCode,
     });
 
-    console.log(success, results)
-
-    return { success, results };
+    return response.data;
   }
 );
+
+// export const resendOtp = createAsyncThunk("auth/resendOtp", async () => {
+
+// })
 
 export const authSlice = createSlice({
   name: "auth",
@@ -38,10 +38,21 @@ export const authSlice = createSlice({
     token: null,
     isLogin: false,
     error: null,
+    wrongEmailTokenCount: 0,
+    resendEmailTokenCount: 0,
   },
   reducers: {
     addEmail: (state, action) => {
       state.email = action.payload;
+    },
+    resetAuth: (state) => {
+      state.status = "idle";
+      state.email = "";
+      state.token = null;
+      state.isLogin = false;
+      state.error = null;
+      state.wrongEmailTokenCount = 0;
+      state.resendEmailTokenCount = 0;
     },
   },
   extraReducers: {
@@ -60,22 +71,34 @@ export const authSlice = createSlice({
     [verifyOtp.pending]: (state) => {
       state.status = "pending";
     },
-    [verifyOtp.fulfilled]: (state, action) => {
+    [verifyOtp.fulfilled]: (state, { payload }) => {
       state.status = "fufilled";
-      state.isLogin = action.payload.isLogin
+
+      if (payload.success) {
+        state.isLogin = payload.results.isLogin;
+        state.wrongEmailTokenCount = payload.results.wrongEmailTokenCount;
+        state.resendEmailTokenCount = payload.results.resendEmailTokenCount;
+      } else {
+        state.wrongEmailTokenCount = payload.messageObj.wrongEmailTokenCount;
+        state.resendEmailTokenCount = payload.messageObj.resendEmailTokenCount;
+      }
     },
     [verifyOtp.rejected]: (state, action) => {
       state.status = "rejected";
       state.error = action.error.message;
-    }
+    },
   },
 });
 
-export const { addEmail } = authSlice.actions;
+export const { addEmail, resetAuth } = authSlice.actions;
 
 export const selectAuthStatus = (state) => state.auth.status;
 export const selectToken = (state) => state.auth.token;
 export const selectIsLogin = (state) => state.auth.isLogin;
 export const selectEmail = (state) => state.auth.email;
+export const selectWrongEmailTokenCount = (state) =>
+  state.auth.wrongEmailTokenCount;
+export const selectResendEmailTokenCount = (state) =>
+  state.auth.resendEmailTokenCount;
 
 export default authSlice.reducer;

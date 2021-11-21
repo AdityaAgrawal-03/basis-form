@@ -8,5 +8,8 @@ export {
   verifyEmail,
   addEmail,
   selectEmail,
-  verifyOtp
+  verifyOtp,
+  selectResendEmailTokenCount,
+  selectWrongEmailTokenCount,
+  resetAuth
 } from "./auth/authSlice";

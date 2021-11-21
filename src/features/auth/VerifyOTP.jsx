@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { selectEmail, selectToken, verifyOtp } from "../index";
+import { useNavigate } from "react-router-dom";
+import {
+  selectEmail,
+  selectToken,
+  verifyOtp,
+  selectResendEmailTokenCount,
+  selectWrongEmailTokenCount,
+  resetAuth
+} from "../index";
 
 export function VerifyOTP() {
   const email = useSelector(selectEmail);
@@ -14,8 +22,12 @@ export function VerifyOTP() {
     valueFive: "",
     valueSix: "",
   });
+  const resendEmailCount = useSelector(selectResendEmailTokenCount);
+  const wrongOtpCount = useSelector(selectWrongEmailTokenCount);
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const checkOtp = () => {
     let verificationCode =
@@ -34,6 +46,14 @@ export function VerifyOTP() {
       })
     );
   };
+
+  useEffect(() => {
+    if (wrongOtpCount >= 3 || resendEmailCount >= 3) {
+      
+      resetAuth();
+      navigate("/", { replace: true });
+    }
+  }, [wrongOtpCount, resendEmailCount, navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4 text-sm md:text-2xl">
@@ -98,6 +118,10 @@ export function VerifyOTP() {
           />
         </div>
       </div>
+      <div className="md:w-1/2 w-full md:text-sm">
+        <button className="text-basis hover:underline">Resend OTP</button>
+      </div>
+
       <button
         className="bg-basis text-white mt-4 rounded-lg px-4 py-2 w-full text-lg hover:bg-green-600 md:w-1/2"
         onClick={(e) => checkOtp(e)}
