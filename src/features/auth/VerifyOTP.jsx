@@ -11,12 +11,14 @@ import {
   selectWrongEmailTokenCount,
   resetAuth,
   resendOtp,
+  selectIsLogin
 } from "../index";
 import { SERVICE_ID, TEMPLATE_ID, USER_ID } from "../../utils/constant";
 
 export function VerifyOTP() {
   const email = useSelector(selectEmail);
   const token = useSelector(selectToken);
+  const isLogin = useSelector(selectIsLogin);
   const [otp, setOtp] = useState({
     valueOne: "",
     valueTwo: "",
@@ -48,6 +50,9 @@ export function VerifyOTP() {
         verificationCode: verificationCode,
       })
     );
+    
+    isLogin ? navigate("/profile") : navigate("/signup")
+    
   };
 
   const resendEmail = () => {

@@ -61,7 +61,7 @@ export function Login() {
           type="button"
           className={
             VALIDATE_EMAIL.test(email)
-              ? "bg-basis mt-4 px-4 py-2 text-xl rounded-lg text-white"
+              ? "bg-basis mt-4 px-4 py-2 text-xl rounded-lg text-white hover:bg-green-600"
               : "bg-basis opacity-60 mt-4 px-4 py-2 text-xl rounded-lg text-white cursor-not-allowed"
           }
           onClick={(e) => sendEmail(e)}

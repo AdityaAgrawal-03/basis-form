@@ -16,7 +16,7 @@ body {
     @apply w-full p-2 outline-none text-lg text-center my-2 bg-transparent
   }
 
-  /* .signup-input {
-    @apply 
-  } */
+  .signup-input {
+    @apply p-2 rounded-md focus:ring-green-500 border-2 focus:ring-2 focus:outline-none my-2 text-lg font-thin
+  }
 }

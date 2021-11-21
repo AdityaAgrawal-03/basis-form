@@ -38,6 +38,25 @@ export const resendOtp = createAsyncThunk(
   }
 );
 
+export const signupUser = createAsyncThunk(
+  "auth/signupUser",
+  async ({ firstName, lastName, email, referredCodeKey, token }) => {
+    const response = await axios.post(`${BASE_URL}/users`, {
+      firstName,
+      lastName,
+      email,
+      referredCodeKey,
+      agreeToPrivacyPolicy: true,
+      token,
+      source: "WEB_APP"
+    });
+
+    console.log(response.data)
+
+    return response.data;
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -48,13 +67,15 @@ export const authSlice = createSlice({
     error: null,
     wrongEmailTokenCount: 0,
     resendEmailTokenCount: 0,
+    name: "",
+    phone: "",
   },
   reducers: {
     addEmail: (state, action) => {
       state.email = action.payload;
     },
     resetAuth: (state, { payload }) => {
-      console.log(payload)
+      console.log(payload);
       state.status = payload.status;
       state.email = payload.email;
       state.token = payload.token;
@@ -102,8 +123,6 @@ export const authSlice = createSlice({
     [resendOtp.fulfilled]: (state, { payload }) => {
       state.status = "fulfilled";
 
-      console.log(payload);
-
       if (payload.success) {
         state.wrongEmailTokenCount = payload.results.wrongEmailTokenCount;
         state.resendEmailTokenCount = payload.results.resendEmailTokenCount;
@@ -113,6 +132,21 @@ export const authSlice = createSlice({
       state.status = "rejected";
       state.error = action.error.message;
     },
+    [signupUser.pending]: (state) => {
+      state.status = "pending"
+    },
+    [signupUser.fulfilled]: (state, { payload }) => {
+      state.status = "fulfilled";
+
+      console.log({ payload })
+
+      state.name = payload.results.user.firstName + payload.results.user.lastName;
+      state.phone = payload.results.user.phoneNumber;
+    },
+    [signupUser.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.error.message;
+    }
   },
 });
 
