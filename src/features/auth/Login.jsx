@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { send } from "emailjs-com";
 import {
@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 
 export function Login() {
   const [email, setEmail] = useState("");
+
+  const inputElement = useRef();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,11 +41,16 @@ export function Login() {
     setEmail("");
   };
 
+  useEffect(() => {
+    inputElement.current.focus();
+  }, []);
+
   return (
     <div className="flex items-center justify-center h-screen">
       <form className="w-full md:w-1/3 rounded-lg flex flex-col p-4">
         <label className="md:text-2xl">Enter your email ID: </label>
         <input
+          ref={inputElement}
           type="email"
           className="p-2 rounded-md focus:ring-green-500 border-0 focus:ring-2 focus:outline-none mt-2 text-lg font-thin"
           value={email}
