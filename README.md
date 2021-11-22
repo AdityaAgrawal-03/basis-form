@@ -35,3 +35,8 @@ A web app built in react-redux which authenticate users, the primary API used in
   - Visit [tailwind docs](https://tailwindcss.com/docs/guides/create-react-app) for configuring tailwind in CRA.
   - `npm i axios` to setup axios and make API calls.
   - Use [EMAILJS](https://www.emailjs.com/) for sending otp to the users. You can refer to their official [docs](https://www.emailjs.com/docs/) to setup the EMAILJS DASHBOARD.
+
+## Deployment
+  - The wesbite is deployed on [netlify](https://app.netlify.com/).
+  - The deployment is very easy, just add `CI=false` in the environment variable while deploying and you're good to go.
+  - In your code, add a `_redirects` file in your `public` folder. In that file, add this code - `/*    /index.html   200`, this will fix the issue of reloading pages of wesbite when deployed on netlify.
