@@ -10,6 +10,7 @@ import {
   getInvite,
   selectReferralToken,
 } from "../index";
+import { VALIDATE_NAME, VALIDATE_PHONE } from "../../utils/constant";
 
 export function Signup() {
   const [form, setForm] = useState({
@@ -17,6 +18,11 @@ export function Signup() {
     lastName: "",
     phone: "",
     referralCode: "",
+  });
+  const [error, setError] = useState({
+    firstName: false,
+    lastName: false,
+    phone: false,
   });
   const token = useSelector(selectToken);
   const email = useSelector(selectEmail);
@@ -73,14 +79,30 @@ export function Signup() {
               id="firstname"
               className="signup-input"
               value={form.firstName}
-              onChange={(e) =>
+              onChange={(e) => {
                 setForm({
                   ...form,
                   firstName: e.target.value,
-                })
-              }
+                });
+                if (!VALIDATE_NAME.test(e.target.value)) {
+                  setError({
+                    ...error,
+                    firstName: true,
+                  });
+                } else {
+                  setError({
+                    ...error,
+                    firstName: false,
+                  });
+                }
+              }}
               required={true}
             />
+            {error.firstName && (
+              <small className="text-red-500">
+                Name should contain atleast 3 letters
+              </small>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="lastname">Last Name :</label>
@@ -88,14 +110,31 @@ export function Signup() {
               id="lastname"
               className="signup-input"
               value={form.lastName}
-              onChange={(e) =>
+              minLength="3"
+              onChange={(e) => {
                 setForm({
                   ...form,
                   lastName: e.target.value,
-                })
-              }
+                });
+                if (!VALIDATE_NAME.test(e.target.value)) {
+                  setError({
+                    ...error,
+                    lastName: true,
+                  });
+                } else {
+                  setError({
+                    ...error,
+                    lastName: false,
+                  });
+                }
+              }}
               required={true}
             />
+            {error.lastName && (
+              <small className="text-red-500">
+                Name should contain at least 3 letters
+              </small>
+            )}
           </div>
           <div className="flex flex-col">
             <label htmlFor="phone">Phone :</label>
@@ -103,14 +142,31 @@ export function Signup() {
               id="phone"
               className="signup-input"
               value={form.phone}
-              onChange={(e) =>
+              onChange={(e) => {
                 setForm({
                   ...form,
                   phone: e.target.value,
-                })
-              }
+                });
+
+                if (!VALIDATE_PHONE.test(Number(e.target.value))) {
+                  setError({
+                    ...error,
+                    phone: true,
+                  });
+                } else {
+                  setError({
+                    ...error,
+                    phone: false,
+                  });
+                }
+              }}
               required={true}
             />
+             {error.phone && (
+              <small className="text-red-500">
+                Please enter indian mobile number
+              </small>
+            )}
           </div>
           <div className="flex flex-col">
             <div className="flex justify-between">
@@ -121,8 +177,7 @@ export function Signup() {
                 className="text-purple-500 underline"
                 onClick={(e) => getInviteLink(e)}
               >
-                {" "}
-                Get invite{" "}
+                Get invite
               </button>
             </div>
 
