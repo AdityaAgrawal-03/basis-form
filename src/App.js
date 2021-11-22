@@ -1,19 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
-import {
-  selectAuthStatus,
-  Login,
-  VerifyOTP,
-  Signup,
-  Profile,
-} from "./features/index";
+import { Login, VerifyOTP, Signup, Profile } from "./features/index";
 import { PrivateRoute } from "./components/PrivateRoute";
 import "./App.css";
 
 function App() {
-  const status = useSelector(selectAuthStatus);
-
   return (
     <div className="bg-coolGray min-h-screen">
       <Routes>
