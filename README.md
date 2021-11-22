@@ -1,5 +1,5 @@
 # Basis User Authentication
-A web app built in react-redux which authenticate users, the primary API used in this project is [https://hiring.getbasis.co/candidate](https://hiring.getbasis.co/candidate).
+A web app built in react-redux which authenticate users, the base url for the API used in this project is [https://hiring.getbasis.co/candidate](https://hiring.getbasis.co/candidate).
 
 ## Tech-stack
  - React
