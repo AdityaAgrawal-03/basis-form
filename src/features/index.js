@@ -15,5 +15,7 @@ export {
   selectWrongEmailTokenCount,
   resetAuth,
   resendOtp,
-  signupUser
+  signupUser,
+  checkReferralToken,
+  selectReferralTokenValidity
 } from "./auth/authSlice";

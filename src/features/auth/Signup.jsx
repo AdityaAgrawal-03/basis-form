@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEmail, selectToken, signupUser } from "../index";
+import { useNavigate } from "react-router-dom";
+import {
+  selectEmail,
+  selectToken,
+  signupUser,
+  checkReferralToken,
+  selectReferralTokenValidity,
+} from "../index";
 
 export function Signup() {
   const [form, setForm] = useState({
@@ -11,13 +18,15 @@ export function Signup() {
   });
   const token = useSelector(selectToken);
   const email = useSelector(selectEmail);
+  const isReferralTokenValid = useSelector(selectReferralTokenValidity);
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
   const signup = (e) => {
     e.preventDefault();
-    if (form.firstName && form.lastName && form.phone) {
-      console.log("here");
+    if (form.firstName && form.lastName && form.phone && isReferralTokenValid) {
       dispatch(
         signupUser({
           firstName: form.firstName,
@@ -28,7 +37,13 @@ export function Signup() {
         })
       );
     }
+
+    navigate("/profile", { replace: true });
   };
+
+  useEffect(() => {
+    dispatch(checkReferralToken({ referral: form.referralCode }));
+  }, [dispatch, form.referralCode]);
 
   return (
     <div className="flex items-center justify-center h-screen">

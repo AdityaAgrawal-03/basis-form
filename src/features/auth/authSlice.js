@@ -48,10 +48,17 @@ export const signupUser = createAsyncThunk(
       referredCodeKey,
       agreeToPrivacyPolicy: true,
       token,
-      source: "WEB_APP"
+      source: "WEB_APP",
     });
 
-    console.log(response.data)
+    return response.data;
+  }
+);
+
+export const checkReferralToken = createAsyncThunk(
+  "auth/checkReferral",
+  async ({ referral }) => {
+    const response = await axios.get(`${BASE_URL}/users/referral/${referral}`);
 
     return response.data;
   }
@@ -69,13 +76,14 @@ export const authSlice = createSlice({
     resendEmailTokenCount: 0,
     name: "",
     phone: "",
+    referralToken: "",
+    isReferralTokenValid: true,
   },
   reducers: {
     addEmail: (state, action) => {
       state.email = action.payload;
     },
     resetAuth: (state, { payload }) => {
-      console.log(payload);
       state.status = payload.status;
       state.email = payload.email;
       state.token = payload.token;
@@ -133,20 +141,36 @@ export const authSlice = createSlice({
       state.error = action.error.message;
     },
     [signupUser.pending]: (state) => {
-      state.status = "pending"
+      state.status = "pending";
     },
     [signupUser.fulfilled]: (state, { payload }) => {
       state.status = "fulfilled";
 
-      console.log({ payload })
-
-      state.name = payload.results.user.firstName + payload.results.user.lastName;
+      state.name =
+        payload.results.user.firstName + payload.results.user.lastName;
       state.phone = payload.results.user.phoneNumber;
     },
     [signupUser.rejected]: (state, action) => {
       state.status = "rejected";
       state.error = action.error.message;
-    }
+    },
+    [checkReferralToken.pending]: (state) => {
+      state.status = "pending";
+    },
+    [checkReferralToken.fulfilled]: (state, { payload }) => {
+      state.status = "fulfilled";
+
+      if (payload.success) {
+        state.referralToken = payload.results.referralToken;
+        state.isReferralTokenValid = true;
+      } else {
+        state.isReferralTokenValid = false;
+      }
+    },
+    [checkReferralToken.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.error.message;
+    },
   },
 });
 
@@ -160,5 +184,7 @@ export const selectWrongEmailTokenCount = (state) =>
   state.auth.wrongEmailTokenCount;
 export const selectResendEmailTokenCount = (state) =>
   state.auth.resendEmailTokenCount;
+export const selectReferralTokenValidity = (state) =>
+  state.auth.isReferralTokenValid;
 
 export default authSlice.reducer;
