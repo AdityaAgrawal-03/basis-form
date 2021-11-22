@@ -7,6 +7,8 @@ import {
   signupUser,
   checkReferralToken,
   selectReferralTokenValidity,
+  getInvite,
+  selectReferralToken,
 } from "../index";
 
 export function Signup() {
@@ -19,6 +21,7 @@ export function Signup() {
   const token = useSelector(selectToken);
   const email = useSelector(selectEmail);
   const isReferralTokenValid = useSelector(selectReferralTokenValidity);
+  const referralToken = useSelector(selectReferralToken);
 
   const navigate = useNavigate();
 
@@ -41,9 +44,21 @@ export function Signup() {
     navigate("/profile", { replace: true });
   };
 
+  const getInviteLink = (e) => {
+    e.preventDefault();
+
+    dispatch(getInvite({ token: token }));
+  };
+
   useEffect(() => {
     dispatch(checkReferralToken({ referral: form.referralCode }));
-  }, [dispatch, form.referralCode]);
+
+    referralToken.length &&
+      setForm((previousForm) => ({
+        ...previousForm,
+        referralCode: referralToken,
+      }));
+  }, [dispatch, form.referralCode, referralToken]);
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -98,9 +113,19 @@ export function Signup() {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="referralCode">
-              Referral <span className="font-thin"> (Optional) : </span>
-            </label>
+            <div className="flex justify-between">
+              <label htmlFor="referralCode">
+                Referral <span className="font-thin"> (Optional) : </span>
+              </label>
+              <button
+                className="text-purple-500 underline"
+                onClick={(e) => getInviteLink(e)}
+              >
+                {" "}
+                Get invite{" "}
+              </button>
+            </div>
+
             <input
               id="referralCode"
               className="signup-input"

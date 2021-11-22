@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL } from "../../utils/constant";
+import { BASE_URL, INVITE_URL } from "../../utils/constant";
 
 export const verifyEmail = createAsyncThunk(
   "auth/verifyEmail",
@@ -70,6 +70,17 @@ export const logoutUser = createAsyncThunk(
     const AUTH_TOKEN = `Bearer ${userId},${authToken}`;
     const response = await axios.delete(`${BASE_URL}/users/logout/${userId}`, {
       headers: { Authorization: AUTH_TOKEN },
+    });
+
+    return response.data;
+  }
+);
+
+export const getInvite = createAsyncThunk(
+  "auth/getInvite",
+  async ({ token }) => {
+    const response = await axios.get(`${INVITE_URL}/invite`, {
+      headers: { Authorization: token },
     });
 
     return response.data;
@@ -184,6 +195,7 @@ export const authSlice = createSlice({
       state.phone = payload.results.user.phoneNumber;
       state.userId = payload.results.user._id;
       state.authToken = payload.results.user.token;
+      state.avatar = payload.results.user.avatar;
     },
     [signupUser.rejected]: (state, action) => {
       state.status = "rejected";
@@ -216,6 +228,23 @@ export const authSlice = createSlice({
       state.status = "rejected";
       state.error = action.error.message;
     },
+    [getInvite.pending]: (state) => {
+      state.status = "pending";
+    },
+    [getInvite.fulfilled]: (state, { payload }) => {
+      state.status = "fulfilled";
+
+      if (payload.success) {
+        state.referralToken = payload.inviteCode;
+        state.isReferralTokenValid = true;
+      } else {
+        state.isReferralTokenValid = false;
+      }
+    },
+    [getInvite.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.error.message;
+    },
   },
 });
 
@@ -236,5 +265,6 @@ export const selectPhone = (state) => state.auth.phone;
 export const selectAvatar = (state) => state.auth.avatar;
 export const selectAuthToken = (state) => state.auth.authToken;
 export const selectUserId = (state) => state.auth.userId;
+export const selectReferralToken = (state) => state.auth.referralToken;
 
 export default authSlice.reducer;
