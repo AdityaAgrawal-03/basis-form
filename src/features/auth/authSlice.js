@@ -77,6 +77,7 @@ export const authSlice = createSlice({
     name: "",
     phone: "",
     userId: "",
+    avatar: "",
     referralToken: "",
     isReferralTokenValid: true,
   },
@@ -127,6 +128,8 @@ export const authSlice = createSlice({
           state.phone = payload.results.user.phoneNumber;
 
           state.userId = payload.results.user._id;
+
+          state.avatar = payload.results.user.avatar;
         }
 
         state.wrongEmailTokenCount = payload.results.wrongEmailTokenCount;
@@ -203,5 +206,6 @@ export const selectReferralTokenValidity = (state) =>
   state.auth.isReferralTokenValid;
 export const selectName = (state) => state.auth.name;
 export const selectPhone = (state) => state.auth.phone;
+export const selectAvatar = (state) => state.auth.avatar;
 
 export default authSlice.reducer;

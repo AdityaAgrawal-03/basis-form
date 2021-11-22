@@ -17,5 +17,8 @@ export {
   resendOtp,
   signupUser,
   checkReferralToken,
-  selectReferralTokenValidity
+  selectReferralTokenValidity,
+  selectName,
+  selectPhone,
+  selectAvatar
 } from "./auth/authSlice";
