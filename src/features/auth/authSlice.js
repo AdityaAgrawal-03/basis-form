@@ -76,6 +76,7 @@ export const authSlice = createSlice({
     resendEmailTokenCount: 0,
     name: "",
     phone: "",
+    userId: "",
     referralToken: "",
     isReferralTokenValid: true,
   },
@@ -91,6 +92,11 @@ export const authSlice = createSlice({
       state.error = payload.error;
       state.wrongEmailTokenCount = payload.wrongEmailTokenCount;
       state.resendEmailTokenCount = payload.resendEmailTokenCount;
+      state.name = payload.name;
+      state.phone = payload.phone;
+      state.userId = payload.userId;
+      state.referralToken = payload.referralToken;
+      state.isReferralTokenValid = payload.isReferralTokenValid;
     },
   },
   extraReducers: {
@@ -114,6 +120,15 @@ export const authSlice = createSlice({
 
       if (payload.success) {
         state.isLogin = payload.results.isLogin;
+
+        if (payload.results.isLogin) {
+          state.name = `${payload.results.user.firstName} ${payload.results.user.lastName}`;
+
+          state.phone = payload.results.user.phoneNumber;
+
+          state.userId = payload.results.user._id;
+        }
+
         state.wrongEmailTokenCount = payload.results.wrongEmailTokenCount;
         state.resendEmailTokenCount = payload.results.resendEmailTokenCount;
       } else {
@@ -146,9 +161,9 @@ export const authSlice = createSlice({
     [signupUser.fulfilled]: (state, { payload }) => {
       state.status = "fulfilled";
 
-      state.name =
-        payload.results.user.firstName + payload.results.user.lastName;
+      state.name = `${payload.results.user.firstName} ${payload.results.user.lastName}`;
       state.phone = payload.results.user.phoneNumber;
+      state.userId = payload.results.user._id;
     },
     [signupUser.rejected]: (state, action) => {
       state.status = "rejected";
@@ -186,5 +201,7 @@ export const selectResendEmailTokenCount = (state) =>
   state.auth.resendEmailTokenCount;
 export const selectReferralTokenValidity = (state) =>
   state.auth.isReferralTokenValid;
+export const selectName = (state) => state.auth.name;
+export const selectPhone = (state) => state.auth.phone;
 
 export default authSlice.reducer;
