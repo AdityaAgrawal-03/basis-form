@@ -11,9 +11,14 @@ import {
   selectWrongEmailTokenCount,
   resetAuth,
   resendOtp,
-  selectIsLogin
+  selectIsLogin,
 } from "../index";
-import { SERVICE_ID, TEMPLATE_ID, USER_ID } from "../../utils/constant";
+import {
+  SERVICE_ID,
+  TEMPLATE_ID,
+  USER_ID,
+  resetToInitialState,
+} from "../../utils/constant";
 
 export function VerifyOTP() {
   const email = useSelector(selectEmail);
@@ -50,9 +55,8 @@ export function VerifyOTP() {
         verificationCode: verificationCode,
       })
     );
-    
-    isLogin ? navigate("/profile") : navigate("/signup")
-    
+
+    isLogin ? navigate("/profile") : navigate("/signup");
   };
 
   const resendEmail = () => {
@@ -72,17 +76,7 @@ export function VerifyOTP() {
 
   useEffect(() => {
     if (wrongOtpCount >= 3 || resendEmailCount >= 3) {
-      dispatch(
-        resetAuth({
-          status: "idle",
-          email: "",
-          token: null,
-          isLogin: false,
-          error: null,
-          wrongEmailTokenCount: 0,
-          resendEmailTokenCount: 0,
-        })
-      );
+      dispatch(resetAuth(resetToInitialState));
 
       navigate("/", { replace: true });
     }
