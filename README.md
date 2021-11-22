@@ -1,44 +1,37 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# Basis User Authentication
+A web app built in react-redux which authenticate users, the primary API used in this project is [https://hiring.getbasis.co/candidate](https://hiring.getbasis.co/candidate).
 
-## Available Scripts
+## Tech-stack
+ - React
+ - Redux-Toolkit
+ - TailwindCSS
+ - React-Router-v6
+ - EMAIL-JS for sending OTP
 
-In the project directory, you can run:
+## How it works?
+ - user enters the email address   (**email verification page**)
+ - an otp is is sent to their mail  (**otp verification page**)
+   - after entering otp
+      - if otp is correct
+        - new user will be directed to sign up page  
+        - existing user will be directed to profile page 
+      - if otp is incorrect
+         - user is allowed to enter wrong otp only 3 times, in the third attempt user will be redirected to home page i.e. email verfication page
+    - if user clicks on resend otp
+      - otp will be resent to the email only 3 times, in the third attempt user will be redirected to home page i.e. email verfication page
+  - **signup page**
+    - user fills the details like first name, last name, phone number and referral code (optional)
+    - if user decides to fill the referral code
+      - user will be allowed to signup only after entering valid referral code 
+    - if user decides to leave the referral code blank
+      - user will be allowed to signup
+  - **profile page**
+    - user can see the details like name, email and phone number
+    - user can also logout from the profile page
 
-### `yarn start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Setup
+  - `npx create-react-app folder-name --template redux` for configuring react and redux-roolkit. Visit official [docs](https://redux.js.org/introduction/installation) for more information.
+  - `npm install history react-router-dom@next` for configuring react-router-v6 (beta version). Visit official [docs](https://github.com/remix-run/react-router/blob/main/docs/api.md) for more information.
+  - Visit [tailwind docs](https://tailwindcss.com/docs/guides/create-react-app) for configuring tailwind in CRA.
+  - `npm i axios` to setup axios and make API calls.
+  - Use [EMAILJS](https://www.emailjs.com/) for sending otp to the users. You can refer to their official [docs](https://www.emailjs.com/docs/) to setup the EMAILJS DASHBOARD.
