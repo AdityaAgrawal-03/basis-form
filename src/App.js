@@ -8,6 +8,7 @@ import {
   Signup,
   Profile,
 } from "./features/index";
+import { PrivateRoute } from "./components/PrivateRoute";
 import "./App.css";
 
 function App() {
@@ -17,9 +18,30 @@ function App() {
     <div className="bg-coolGray min-h-screen">
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/verify" element={<VerifyOTP />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/verify"
+          element={
+            <PrivateRoute>
+              <VerifyOTP />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PrivateRoute>
+              <Signup />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </div>
   );
