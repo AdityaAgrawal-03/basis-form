@@ -20,5 +20,8 @@ export {
   selectReferralTokenValidity,
   selectName,
   selectPhone,
-  selectAvatar
+  selectAvatar,
+  selectAuthToken,
+  logoutUser,
+  selectUserId
 } from "./auth/authSlice";

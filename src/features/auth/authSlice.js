@@ -64,12 +64,25 @@ export const checkReferralToken = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async ({ userId, authToken }) => {
+    const AUTH_TOKEN = `Bearer ${userId},${authToken}`;
+    const response = await axios.delete(`${BASE_URL}/users/logout/${userId}`, {
+      headers: { Authorization: AUTH_TOKEN },
+    });
+
+    return response.data;
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
     status: "idle",
     email: "",
     token: null,
+    authToken: null,
     isLogin: false,
     error: null,
     wrongEmailTokenCount: 0,
@@ -130,6 +143,8 @@ export const authSlice = createSlice({
           state.userId = payload.results.user._id;
 
           state.avatar = payload.results.user.avatar;
+
+          state.authToken = payload.results.user.token;
         }
 
         state.wrongEmailTokenCount = payload.results.wrongEmailTokenCount;
@@ -167,6 +182,7 @@ export const authSlice = createSlice({
       state.name = `${payload.results.user.firstName} ${payload.results.user.lastName}`;
       state.phone = payload.results.user.phoneNumber;
       state.userId = payload.results.user._id;
+      state.authToken = payload.results.user.token;
     },
     [signupUser.rejected]: (state, action) => {
       state.status = "rejected";
@@ -189,6 +205,16 @@ export const authSlice = createSlice({
       state.status = "rejected";
       state.error = action.error.message;
     },
+    [logoutUser.pending]: (state) => {
+      state.status = "pending";
+    },
+    [logoutUser.fulfilled]: (state, action) => {
+      state.status = "fulfilled";
+    },
+    [logoutUser.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.error.message;
+    },
   },
 });
 
@@ -207,5 +233,7 @@ export const selectReferralTokenValidity = (state) =>
 export const selectName = (state) => state.auth.name;
 export const selectPhone = (state) => state.auth.phone;
 export const selectAvatar = (state) => state.auth.avatar;
+export const selectAuthToken = (state) => state.auth.authToken;
+export const selectUserId = (state) => state.auth.userId;
 
 export default authSlice.reducer;

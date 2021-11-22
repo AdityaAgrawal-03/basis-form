@@ -1,11 +1,30 @@
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { selectEmail, selectName, selectPhone, selectAvatar } from "../index";
+import {
+  selectEmail,
+  selectName,
+  selectPhone,
+  selectAvatar,
+  selectAuthToken,
+  logoutUser,
+  resetAuth,
+  selectUserId,
+} from "../index";
+import { resetToInitialState } from "../../utils/constant";
 
 export function Profile() {
   const name = useSelector(selectName);
   const email = useSelector(selectEmail);
   const phone = useSelector(selectPhone);
   const avatar = useSelector(selectAvatar);
+  const authToken = useSelector(selectAuthToken);
+  const userId = useSelector(selectUserId);
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(logoutUser({ userId: userId, authToken: authToken }));
+    dispatch(resetAuth(resetToInitialState));
+  };
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -33,6 +52,13 @@ export function Profile() {
           <span className="material-icons-round mr-4 ml-4">call</span>
           <p> {phone} </p>
         </div>
+
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded-md w-11/12 md:w-3/4 lg:w-1/2 hover:bg-red-600"
+          onClick={logout}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
