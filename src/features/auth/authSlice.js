@@ -102,6 +102,7 @@ export const authSlice = createSlice({
       state.status = payload.status;
       state.email = payload.email;
       state.token = payload.token;
+      state.authToken = payload.authToken;
       state.isLogin = payload.login;
       state.error = payload.error;
       state.wrongEmailTokenCount = payload.wrongEmailTokenCount;

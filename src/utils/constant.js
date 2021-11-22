@@ -8,6 +8,7 @@ export const resetToInitialState = {
   status: "idle",
   email: "",
   token: null,
+  authToken: null,
   isLogin: false,
   error: null,
   wrongEmailTokenCount: 0,
