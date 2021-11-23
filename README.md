@@ -1,5 +1,9 @@
 # Basis User Authentication
-A web app built in react-redux which authenticate users, the base url for the API used in this project is [https://hiring.getbasis.co/candidate](https://hiring.getbasis.co/candidate).
+A web app built in react-redux which authenticate users.
+
+## API
+- the base url which performs all authentication steps in this project - [https://hiring.getbasis.co/candidate](https://hiring.getbasis.co/candidate).
+- the base invite url to get the referral code - [https://basis-invite-url.aditya365.repl.co](https://basis-invite-url.aditya365.repl.co)
 
 ## Tech-stack
  - React
@@ -25,6 +29,7 @@ A web app built in react-redux which authenticate users, the base url for the AP
       - user will be allowed to signup only after entering valid referral code 
     - if user decides to leave the referral code blank
       - user will be allowed to signup
+    - if user clicks on `Get Invite` link, the referral code will auto-fill with a valid value
   - **profile page**
     - user can see the details like name, email and phone number
     - user can also logout from the profile page
