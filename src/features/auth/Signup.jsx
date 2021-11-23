@@ -33,9 +33,16 @@ export function Signup() {
 
   const dispatch = useDispatch();
 
+  /* checks the validity of all the values in form fields */
+  const isFormValid =
+    VALIDATE_NAME.test(form.firstName) &&
+    VALIDATE_NAME.test(form.lastName) &&
+    VALIDATE_PHONE.test(form.phone) &&
+    isReferralTokenValid;
+
   const signup = (e) => {
     e.preventDefault();
-    if (form.firstName && form.lastName && form.phone && isReferralTokenValid) {
+    if (isFormValid) {
       dispatch(
         signupUser({
           firstName: form.firstName,
@@ -199,8 +206,13 @@ export function Signup() {
             />
           </div>
           <button
-            className="uppercase bg-basis w-full text-white px-4 py-2 rounded-md mt-4 hover:bg-green-600"
+            className={
+              isFormValid
+                ? "uppercase bg-basis w-full text-white px-4 py-2 rounded-md mt-4 hover:bg-green-600"
+                : "uppercase bg-basis w-full text-white px-4 py-2 rounded-md mt-4 opacity-60 cursor-not-allowed"
+            }
             onClick={(e) => signup(e)}
+            disabled={!isFormValid}
           >
             Signup
           </button>
