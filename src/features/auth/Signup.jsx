@@ -29,8 +29,6 @@ export function Signup() {
   const isReferralTokenValid = useSelector(selectReferralTokenValidity);
   const referralToken = useSelector(selectReferralToken);
 
-  console.log(form.phone)
-
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -45,7 +43,7 @@ export function Signup() {
           email: email,
           referredCodeKey: form.referralCode,
           token: token,
-          phone: form.phone
+          phone: form.phone,
         })
       );
     }
@@ -165,7 +163,7 @@ export function Signup() {
               }}
               required={true}
             />
-             {error.phone && (
+            {error.phone && (
               <small className="text-red-500">
                 Please enter indian mobile number
               </small>

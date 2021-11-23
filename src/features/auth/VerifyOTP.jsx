@@ -32,6 +32,7 @@ export function VerifyOTP() {
     valueFive: "",
     valueSix: "",
   });
+
   const resendEmailCount = useSelector(selectResendEmailTokenCount);
   const wrongOtpCount = useSelector(selectWrongEmailTokenCount);
 
@@ -82,6 +83,22 @@ export function VerifyOTP() {
     }
   }, [wrongOtpCount, resendEmailCount, navigate, dispatch]);
 
+  const checkFocus = (e) => {
+    const [fieldName, fieldIndex] = e.target.name.split("-");
+
+    if (e.target.value.length >= e.target.maxLength) {
+      if (parseInt(fieldIndex, 10) < 6) {
+        const nextSibling = document.querySelector(
+          `input[name=otp-${parseInt(fieldIndex, 10) + 1}]`
+        );
+
+        if (nextSibling !== null) {
+          nextSibling.focus();
+        }
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4 text-sm md:text-2xl">
       <p>
@@ -92,18 +109,27 @@ export function VerifyOTP() {
           <input
             type="text"
             maxLength="1"
+            name="otp-1"
             className="otp-box"
+            autoFocus
             value={otp.valueOne}
-            onChange={(e) => setOtp({ ...otp, valueOne: e.target.value })}
+            onChange={(e) => {
+              setOtp({ ...otp, valueOne: e.target.value });
+              checkFocus(e);
+            }}
           />
         </div>
         <div className="h-16 w-12 border-2 border-green-500 rounded-md mt-2 md:mr-4">
           <input
             type="text"
             maxLength="1"
+            name="otp-2"
             className="otp-box"
             value={otp.valueTwo}
-            onChange={(e) => setOtp({ ...otp, valueTwo: e.target.value })}
+            onChange={(e) => {
+              setOtp({ ...otp, valueTwo: e.target.value });
+              checkFocus(e);
+            }}
           />
         </div>
 
@@ -111,27 +137,39 @@ export function VerifyOTP() {
           <input
             type="text"
             maxLength="1"
+            name="otp-3"
             className="otp-box"
             value={otp.valueThree}
-            onChange={(e) => setOtp({ ...otp, valueThree: e.target.value })}
+            onChange={(e) => {
+              setOtp({ ...otp, valueThree: e.target.value });
+              checkFocus(e);
+            }}
           />
         </div>
         <div className="h-16 w-12 border-2 border-green-500 rounded-md mt-2 md:mr-4">
           <input
             type="text"
             maxLength="1"
+            name="otp-4"
             className="otp-box"
             value={otp.valueFour}
-            onChange={(e) => setOtp({ ...otp, valueFour: e.target.value })}
+            onChange={(e) => {
+              setOtp({ ...otp, valueFour: e.target.value });
+              checkFocus(e);
+            }}
           />
         </div>
         <div className="h-16 w-12 border-2 border-green-500 rounded-md mt-2 md:mr-4">
           <input
             type="text"
             maxLength="1"
+            name="otp-5"
             className="otp-box"
             value={otp.valueFive}
-            onChange={(e) => setOtp({ ...otp, valueFive: e.target.value })}
+            onChange={(e) => {
+              setOtp({ ...otp, valueFive: e.target.value });
+              checkFocus(e);
+            }}
           />
         </div>
 
@@ -139,9 +177,14 @@ export function VerifyOTP() {
           <input
             type="text"
             maxLength="1"
+            name="otp-6"
             className="otp-box"
             value={otp.valueSix}
-            onChange={(e) => setOtp({ ...otp, valueSix: e.target.value })}
+            onChange={(e) => {
+              console.log({ e });
+              setOtp({ ...otp, valueSix: e.target.value });
+              checkFocus(e);
+            }}
           />
         </div>
       </div>
