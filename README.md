@@ -1,5 +1,5 @@
 # Basis User Authentication
-A web app built in react-redux which authenticate users.
+A **responsive** web app built in react-redux which authenticate users.
 
 ## API
 - the base url which performs all authentication steps in this project - [https://hiring.getbasis.co/candidate](https://hiring.getbasis.co/candidate).
@@ -33,6 +33,10 @@ A web app built in react-redux which authenticate users.
   - **profile page**
     - user can see the details like name, email and phone number
     - user can also logout from the profile page
+
+## Routes with screens
+  - `https://basis-auth.netlify.app/`
+     
 
 ## Setup
   - `npx create-react-app folder-name --template redux` for configuring react and redux-roolkit. Visit official [docs](https://redux.js.org/introduction/installation) for more information.
