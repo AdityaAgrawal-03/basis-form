@@ -40,7 +40,9 @@ export const resendOtp = createAsyncThunk(
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
-  async ({ firstName, lastName, email, referredCodeKey, token }) => {
+  async ({ firstName, lastName, email, referredCodeKey, token, phone }) => {
+    console.log(typeof phone)
+    console.log({ phone })
     const response = await axios.post(`${BASE_URL}/users`, {
       firstName,
       lastName,
@@ -49,8 +51,10 @@ export const signupUser = createAsyncThunk(
       agreeToPrivacyPolicy: true,
       token,
       source: "WEB_APP",
+      phoneNumber: phone
     });
 
+    console.log(response.data)
     return response.data;
   }
 );
@@ -190,6 +194,8 @@ export const authSlice = createSlice({
     },
     [signupUser.fulfilled]: (state, { payload }) => {
       state.status = "fulfilled";
+
+      console.log({ payload })
 
       state.name = `${payload.results.user.firstName} ${payload.results.user.lastName}`;
       state.phone = payload.results.user.phoneNumber;
