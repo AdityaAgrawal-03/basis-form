@@ -35,7 +35,21 @@ A **responsive** web app built in react-redux which authenticate users.
     - user can also logout from the profile page
 
 ## Routes with screens
-  - `https://basis-auth.netlify.app/`
+  - `https://basis-auth.netlify.app/` 
+  
+    ![home route](src/assets/home.png)
+    
+  - `https://basis-auth.netlify.app/verify`
+
+    ![veirfy otp route](src/assets/verifyOtp.png)
+
+  - `https://basis-auth.netlify.app/signup`
+
+    ![signup route](src/assets/signup.png)
+
+  - `https://basis-auth.netlify.app/profile`
+
+    ![profile route](src/assets/profile.png)
      
 
 ## Setup
