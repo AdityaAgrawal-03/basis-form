@@ -9,7 +9,7 @@ export const verifyEmail = createAsyncThunk(
       email: email,
     });
 
-    return response.data.results;
+    return response.data;
   }
 );
 
@@ -105,6 +105,7 @@ export const authSlice = createSlice({
     avatar: "",
     referralToken: "",
     isReferralTokenValid: true,
+    otpResponseSuccess: null,
   },
   reducers: {
     addEmail: (state, action) => {
@@ -130,10 +131,10 @@ export const authSlice = createSlice({
     [verifyEmail.pending]: (state) => {
       state.status = "pending";
     },
-    [verifyEmail.fulfilled]: (state, action) => {
+    [verifyEmail.fulfilled]: (state, { payload }) => {
       state.status = "fulfilled";
-      state.token = String(action.payload.token);
-      state.isLogin = action.payload.isLogin;
+      state.token = String(payload.results.token);
+      state.isLogin = payload.results.isLogin;
     },
     [verifyEmail.rejected]: (state, action) => {
       state.status = "rejected";
@@ -141,9 +142,11 @@ export const authSlice = createSlice({
     },
     [verifyOtp.pending]: (state) => {
       state.status = "pending";
+      state.responseSuccess = false;
     },
     [verifyOtp.fulfilled]: (state, { payload }) => {
       state.status = "fufilled";
+      state.otpResponseSuccess = payload.success;
 
       if (payload.success) {
         state.isLogin = payload.results.isLogin;
@@ -249,7 +252,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { addEmail, resetAuth } = authSlice.actions;
+export const { addEmail, resetAuth, resetResponseSuccess } = authSlice.actions;
 
 export const selectAuthStatus = (state) => state.auth.status;
 export const selectToken = (state) => state.auth.token;
@@ -267,5 +270,7 @@ export const selectAvatar = (state) => state.auth.avatar;
 export const selectAuthToken = (state) => state.auth.authToken;
 export const selectUserId = (state) => state.auth.userId;
 export const selectReferralToken = (state) => state.auth.referralToken;
+export const selectOtpResponseSuccess = (state) =>
+  state.auth.otpResponseSuccess;
 
 export default authSlice.reducer;

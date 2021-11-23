@@ -12,6 +12,7 @@ import {
   resetAuth,
   resendOtp,
   selectIsLogin,
+  selectOtpResponseSuccess,
 } from "../index";
 import {
   SERVICE_ID,
@@ -24,6 +25,7 @@ export function VerifyOTP() {
   const email = useSelector(selectEmail);
   const token = useSelector(selectToken);
   const isLogin = useSelector(selectIsLogin);
+  const success = useSelector(selectOtpResponseSuccess);
   const [otp, setOtp] = useState({
     valueOne: "",
     valueTwo: "",
@@ -32,6 +34,7 @@ export function VerifyOTP() {
     valueFive: "",
     valueSix: "",
   });
+  const [error, setError] = useState("");
 
   const resendEmailCount = useSelector(selectResendEmailTokenCount);
   const wrongOtpCount = useSelector(selectWrongEmailTokenCount);
@@ -56,8 +59,6 @@ export function VerifyOTP() {
         verificationCode: verificationCode,
       })
     );
-
-    isLogin ? navigate("/profile") : navigate("/signup");
   };
 
   const resendEmail = () => {
@@ -74,6 +75,16 @@ export function VerifyOTP() {
 
     dispatch(resendOtp({ email: email, token: token }));
   };
+
+  useEffect(() => {
+    if (isLogin === true && success === true) {
+      navigate("/profile");
+    } else if (isLogin === false && success === true) {
+      navigate("/signup");
+    } else if (success === false) {
+      setError("Wrong otp, please enter again!");
+    }
+  }, [isLogin, navigate, success]);
 
   useEffect(() => {
     if (wrongOtpCount >= 3 || resendEmailCount >= 3) {
@@ -181,13 +192,13 @@ export function VerifyOTP() {
             className="otp-box"
             value={otp.valueSix}
             onChange={(e) => {
-              console.log({ e });
               setOtp({ ...otp, valueSix: e.target.value });
               checkFocus(e);
             }}
           />
         </div>
       </div>
+      <span className="text-red-500 my-2 md:text-lg"> {error} </span>
       <div className="md:w-1/2 w-full md:text-sm">
         <button
           className="text-basis hover:underline"
