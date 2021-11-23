@@ -76,6 +76,7 @@ export function VerifyOTP() {
     dispatch(resendOtp({ email: email, token: token }));
   };
 
+  /* otp validation w.r.t to API */
   useEffect(() => {
     if (isLogin === true && success === true) {
       navigate("/profile");
@@ -86,6 +87,7 @@ export function VerifyOTP() {
     }
   }, [isLogin, navigate, success]);
 
+  /* navigate to login page after 3 unsuccessful or 3 resend otp actions */
   useEffect(() => {
     if (wrongOtpCount >= 3 || resendEmailCount >= 3) {
       dispatch(resetAuth(resetToInitialState));
@@ -94,6 +96,7 @@ export function VerifyOTP() {
     }
   }, [wrongOtpCount, resendEmailCount, navigate, dispatch]);
 
+  /* auto-focus to next input element */
   const checkFocus = (e) => {
     const [fieldName, fieldIndex] = e.target.name.split("-");
 

@@ -21,6 +21,7 @@ export function Login() {
   const sendEmail = (e) => {
     e.preventDefault();
 
+    /* send otp to email using EMAIL-JS */
     send(
       SERVICE_ID,
       TEMPLATE_ID,

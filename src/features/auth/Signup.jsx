@@ -51,12 +51,14 @@ export function Signup() {
     navigate("/profile", { replace: true });
   };
 
+  /* hit invite url to get referral token */
   const getInviteLink = (e) => {
     e.preventDefault();
 
     dispatch(getInvite({ token: token }));
   };
 
+  /* check referral token validity in real-time */
   useEffect(() => {
     dispatch(checkReferralToken({ referral: form.referralCode }));
 
